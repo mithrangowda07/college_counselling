@@ -5,6 +5,7 @@ from io import BytesIO
 from fpdf import FPDF
 import matplotlib.pyplot as plt
 import pandas as pd
+import tempfile
 
 def category(df):
     exclusion_list = ["College Code", "Place", "College Name", "Branch", "Branch code"]
@@ -97,15 +98,16 @@ def generate_pdf_table(data, file_prefix="table"):
     sorted_colleges = sorted(unique_colleges.values(), key=lambda x: x[6])
     columns = ["College Code", "Place", "College", "Branch", "Branch Code", "Category", "Cutoff"]
     dataframe = pd.DataFrame(sorted_colleges, columns=columns)
+    
     # Generate today's date for the filename
     today = datetime.date.today().strftime("%Y-%m-%d")
     file_name = f"{file_prefix}_{today}.pdf"
-
+    
     # Create a Matplotlib figure
     fig, ax = plt.subplots(figsize=(8, 4))
     ax.axis('tight')
     ax.axis('off')
-
+    
     # Create a table from the DataFrame
     table = ax.table(
         cellText=dataframe.values,
@@ -116,22 +118,22 @@ def generate_pdf_table(data, file_prefix="table"):
     table.auto_set_font_size(False)
     table.set_fontsize(10)
     table.auto_set_column_width(col=list(range(len(dataframe.columns))))
-
+    
     # Save the table as an image
     table_image = "table_image.png"
     plt.savefig(table_image, bbox_inches="tight", dpi=300)
     plt.close(fig)  # Close the figure to release memory
-
-    # Generate a PDF with the table image
+    
+    # Generate a PDF and save to a file
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
     pdf.cell(200, 10, txt="Selected Colleges and Cutoffs", ln=True, align="C")
     pdf.image(table_image, x=10, y=30, w=190)
-
-    # Write PDF to an in-memory BytesIO buffer
-    pdf_buffer = BytesIO()
-    pdf.output(pdf_buffer)  # Output the PDF content to the buffer
-    pdf_buffer.seek(0)  # Reset buffer pointer to the beginning
-
-    return pdf_buffer, file_name
+    
+    # Save PDF to a temporary file
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
+        pdf_path = temp_file.name
+        pdf.output(pdf_path)  # Write the PDF content to the temp file
+    
+    return pdf_path  # Return the file path of the generated PDF

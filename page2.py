@@ -43,14 +43,18 @@ def page2(df):
                 st.table(selected_df)
 
             try:
-                # Generate the PDF file
-                pdf_buffer, file_name = generate_pdf_table(st.session_state["selected_colleges"])
+                # Generate the PDF file and get the file path
+                pdf_path = generate_pdf_table(st.session_state["selected_colleges"])
+
+                # Read the file back into memory
+                with open(pdf_path, "rb") as pdf_file:
+                    pdf_data = pdf_file.read()
 
                 # Display the download button for the PDF
                 st.download_button(
                     label="Download as PDF",
-                    data=pdf_buffer,
-                    file_name=file_name,
+                    data=pdf_data,
+                    file_name="colleges_table.pdf",
                     mime="application/pdf",
                 )
             except ValueError as e:

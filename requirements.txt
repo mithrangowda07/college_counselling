@@ -1,1 +1,6 @@
+fpdf
 openpyxl
+pandas
+matplotlib
+datetime
+tempfile    
