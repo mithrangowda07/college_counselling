@@ -1,9 +1,13 @@
 import io
 import datetime
 import pandas as pd
+from io import BytesIO
+from fpdf import FPDF
+import matplotlib.pyplot as plt
+import pandas as pd
 
 def category(df):
-    exclusion_list = ["College Code", "Place", "College Name", "Branch ", "Branch code"]
+    exclusion_list = ["College Code", "Place", "College Name", "Branch", "Branch code"]
     return [col for col in df.columns if col not in exclusion_list]
 
 def getcutoff_rank(selected_list,df):
@@ -82,23 +86,52 @@ def gettable(newlist):
     selected_df.index = range(1, len(selected_df) + 1)
     
     return selected_df
-        
-def generate_csv_file(dataframe: pd.DataFrame, file_prefix: str = "selected_colleges") -> tuple:
-    """
-    Generates a CSV file from the provided DataFrame and returns its content along with the filename.
 
-    Parameters:
-    - dataframe (pd.DataFrame): The DataFrame to be converted to a CSV file.
-    - file_prefix (str): Prefix for the filename. Defaults to "selected_colleges".
-
-    Returns:
-    - tuple: A tuple containing the CSV content as bytes and the filename.
-    """
-    if dataframe is None or dataframe.empty:
-        raise ValueError("The provided DataFrame is empty. Please ensure there is data to generate a CSV.")
+def generate_pdf_table(data, file_prefix="table"):
+    unique_colleges = {}
+    for entry in data:
+        key = (entry[0], entry[3])  # Unique key based on College Code and Branch
+        unique_colleges[key] = entry  # Always overwrite, keeping the latest entry
     
-    csv_content = dataframe.to_csv(index=False).encode("utf-8")
+    # Extract the unique entries and sort them by Cutoff Rank
+    sorted_colleges = sorted(unique_colleges.values(), key=lambda x: x[6])
+    columns = ["College Code", "Place", "College", "Branch", "Branch Code", "Category", "Cutoff"]
+    dataframe = pd.DataFrame(sorted_colleges, columns=columns)
+    # Generate today's date for the filename
     today = datetime.date.today().strftime("%Y-%m-%d")
-    file_name = f"{file_prefix}_{today}.csv"
-    
-    return csv_content, file_name
+    file_name = f"{file_prefix}_{today}.pdf"
+
+    # Create a Matplotlib figure
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.axis('tight')
+    ax.axis('off')
+
+    # Create a table from the DataFrame
+    table = ax.table(
+        cellText=dataframe.values,
+        colLabels=dataframe.columns,
+        cellLoc="center",
+        loc="center",
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+    table.auto_set_column_width(col=list(range(len(dataframe.columns))))
+
+    # Save the table as an image
+    table_image = "table_image.png"
+    plt.savefig(table_image, bbox_inches="tight", dpi=300)
+    plt.close(fig)  # Close the figure to release memory
+
+    # Generate a PDF with the table image
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    pdf.cell(200, 10, txt="Selected Colleges and Cutoffs", ln=True, align="C")
+    pdf.image(table_image, x=10, y=30, w=190)
+
+    # Write PDF to an in-memory BytesIO buffer
+    pdf_buffer = BytesIO()
+    pdf.output(pdf_buffer)  # Output the PDF content to the buffer
+    pdf_buffer.seek(0)  # Reset buffer pointer to the beginning
+
+    return pdf_buffer, file_name
