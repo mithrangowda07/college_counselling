@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Define the file path
-FILE_PATH = r"C:\Users\mithr\Desktop\3rd Sem\DTL\cet_colg_data.xlsx"
+FILE_PATH = "cet_colg_data.xlsx"
 
 # Load the Excel file
 @st.cache_data

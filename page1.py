@@ -43,15 +43,13 @@ def page1(df):
                             st.error("No data available for the selected options. Please make valid selections.")
                         else:
                             st.success(f"Cutoff Rank for the selected option: {cutoff_rank[0]}")
-                            if cutoff_rank[1] == "GM":
-                                selected_category = "GM"
                             selected_list = [
                                 college_code,
                                 selected_place,
                                 selected_college,
                                 selected_branch,
                                 branch_code,
-                                selected_category,
+                                cutoff_rank[1],
                                 cutoff_rank[0],
                             ]
                             st.session_state["selected_data"].append(selected_list)

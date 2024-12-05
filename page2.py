@@ -33,20 +33,16 @@ def page2(df):
                     college_code = getcollege_code(selected_list, df)
                     branch_code = getbranch_code(selected_list, df)
                     if cutoff_rank[0] != -1 and college_code != -1 and branch_code != -1:
-                        if cutoff_rank[1] == "GM":
-                            temp_category = selected_category
-                            selected_category = "GM"
                         selected_list = [
                             college_code,
                             selected_place,
                             selected_college,
                             branch,
                             branch_code,
-                            selected_category,
+                            cutoff_rank[1],
                             cutoff_rank[0],
                         ]
                         st.session_state["selected_colleges"].append(selected_list)
-                        selected_category = temp_category
     
     with col2:  # Delete from the list logic
         st.write("### Delete from the List")

@@ -11,39 +11,66 @@ def category(df):
     exclusion_list = ["College Code", "Place", "College Name", "Branch", "Branch code"]
     return [col for col in df.columns if col not in exclusion_list]
 
-def getcutoff_rank(selected_list,df):
-    if selected_list[0] != "--Select--" and selected_list[1] != "--Select--" and selected_list[2] != "--Select--" and selected_list[3] != "--Select--":
+def getcutoff_rank(selected_list, df):
+    if all(item != "--Select--" for item in selected_list[:4]):
         filtered_data = df[
             (df["College Name"] == selected_list[2]) & (df["Branch"] == selected_list[3])
         ]
         if not filtered_data.empty:
-            change_category = None
-            cutoff_rank = filtered_data[selected_list[0]].values[0]
+            # The selected category
+            category = selected_list[0]
             
-            # Check for numeric cutoff
-            if isinstance(cutoff_rank, (int, float)):
-                pass  # Valid numeric value
-            elif isinstance(cutoff_rank, str) and cutoff_rank.isnumeric():
-                cutoff_rank = int(cutoff_rank)
-            else: 
-                if "GM" in filtered_data:
-                    cutoff_rank = filtered_data["GM"].values[0]
-                    change_category = "GM"
-                    if (isinstance(cutoff_rank, (int, float))):
-                        pass
-                    else:
-                        cutoff_rank = 0
-                else:
-                    None
+            # Define fallback order based on the category
+            fallback_order = {
+                "1R": ["1R", "1G", "GM"],
+                "1K": ["1K", "1G", "GM"],
+                "1G": ["1G", "GM"],
+                "2AR": ["2AR", "2AG", "GM"],
+                "2AK": ["2AK", "2AG", "GM"],
+                "2AG": ["2AG", "GM"],
+                "2BR": ["2BR", "2BG", "GM"],
+                "2BK": ["2BK", "2BG", "GM"],
+                "2BG": ["2BG", "GM"],
+                "3AK": ["3AK", "3AG", "GM"],
+                "3AR": ["3AR", "3AG", "GM"],
+                "3AG": ["3AG", "GM"],
+                "3BK": ["3BK", "3BG", "GM"],
+                "3BR": ["3BR", "3BG", "GM"],
+                "3BG": ["3BG", "GM"],
+                "STK": ["STK", "STG", "GM"],
+                "STR": ["STR", "STG", "GM"],
+                "STG": ["STG", "GM"],
+                "SCK": ["SCK", "SCG", "GM"],
+                "SCR": ["SCR", "SCG", "GM"],
+                "SCG": ["SCG", "GM"],
+                # Default fallbacks for undefined categories
+                "GM": ["GM"],
+            }
+
             
-            if cutoff_rank is not None:
-                return [cutoff_rank, change_category]
-            else:
-                return [-1, change_category]         
+            # Get the fallback order or default to just the category and GM
+            fallback_categories = fallback_order.get(category, [category, "GM"])
+            
+            # Iterate through fallback categories to find a valid cutoff
+            for fallback_category in fallback_categories:
+                if fallback_category in filtered_data:
+                    cutoff_rank = filtered_data[fallback_category].values[0]
+                    
+                    # Check if the cutoff rank is valid
+                    if isinstance(cutoff_rank, (int, float)):
+                        return [cutoff_rank, fallback_category]
+                    elif isinstance(cutoff_rank, str) and cutoff_rank.isnumeric():
+                        return [int(cutoff_rank), fallback_category]
+            
+            # No valid cutoff rank found in fallback categories
+            return [-1, category]
         else:
-            return [-1, change_category] 
+            # No matching data for college and branch
+            return [-1, selected_list[0]]
     else:
-        return [-1, change_category] 
+        # Invalid selection
+        return [-1, selected_list[0]]
+ 
     
 def getcollege_code(selected_list,df):
     if selected_list[0] != "--Select--" and selected_list[1] != "--Select--" and selected_list[2] != "--Select--" and selected_list[3] != "--Select--":
