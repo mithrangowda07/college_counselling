@@ -20,8 +20,8 @@ df = load_excel_file()
 
 #Sidebar
 st.sidebar.image('rvce_logo.jpg', width=230)
-st.sidebar.title("Hello")
-pagelist = ["Home","Sort the college","Best branch in College based on cutoff","Branch"]
+st.sidebar.title("Navigator")
+pagelist = ["Home","Normal Sort","College","Branch"]
 app = st.sidebar.radio("Select Page", pagelist)
 st.sidebar.markdown("""
     <div style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; color: #f58067;">
