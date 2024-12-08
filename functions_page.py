@@ -1,20 +1,14 @@
-import io
 import datetime
 import pandas as pd
-from io import BytesIO
 from fpdf import FPDF
 import matplotlib.pyplot as plt
 import pandas as pd
 import tempfile
 
-def category(df):
-    exclusion_list = ["College Code", "Place", "College Name", "Branch", "Branch code"]
-    return [col for col in df.columns if col not in exclusion_list]
-
 def getcutoff_rank(selected_list, df):
     if all(item != "--Select--" for item in selected_list[:4]):
         filtered_data = df[
-            (df["College Name"] == selected_list[2]) & (df["Branch"] == selected_list[3])
+            (df["College Name"] == selected_list[2]) & (df["Branch Name"] == selected_list[3])
         ]
         if not filtered_data.empty:
             # The selected category
@@ -75,7 +69,7 @@ def getcutoff_rank(selected_list, df):
 def getcollege_code(selected_list,df):
     if selected_list[0] != "--Select--" and selected_list[1] != "--Select--" and selected_list[2] != "--Select--" and selected_list[3] != "--Select--":
         filtered_data = df[
-            (df["College Name"] == selected_list[2]) & (df["Branch"] == selected_list[3])
+            (df["College Name"] == selected_list[2]) & (df["Branch Name"] == selected_list[3])
         ]
         if not filtered_data.empty:
             college_code = filtered_data["College Code"].values[0]
@@ -87,7 +81,7 @@ def getcollege_code(selected_list,df):
 def getbranch_code(selected_list,df):
     if selected_list[0] != "--Select--" and selected_list[1] != "--Select--" and selected_list[2] != "--Select--" and selected_list[3] != "--Select--":
         filtered_data = df[
-            (df["College Name"] == selected_list[2]) & (df["Branch"] == selected_list[3])
+            (df["College Name"] == selected_list[2]) & (df["Branch Name"] == selected_list[3])
         ]
         if not filtered_data.empty:
             branch_code = filtered_data["Branch code"].values[0]
@@ -123,7 +117,7 @@ def generate_pdf_table(data, file_prefix="table"):
     
     # Extract the unique entries and sort them by Cutoff Rank
     sorted_colleges = sorted(unique_colleges.values(), key=lambda x: x[6])
-    columns = ["College Code", "Place", "College", "Branch", "Branch Code", "Category", "Cutoff"]
+    columns = ["College Code", "Place", "College", "Branch Name", "Branch Code", "Category", "Cutoff"]
     dataframe = pd.DataFrame(sorted_colleges, columns=columns)
     
     # Generate today's date for the filename

@@ -10,7 +10,7 @@ def page2(df):
     
     with col1:
         st.write("### Add College to the List")
-        exclusion_list = ["College Code", "Place", "College Name", "Branch", "Branch code"]
+        exclusion_list = ["College Code", "Place", "College Name", "Branch Name", "Branch code"]
         category_list = [col for col in df.columns if col not in exclusion_list]
         selected_category = st.selectbox("Select Category", ["--Select--"] + sorted(category_list), key="add_category")
         selected_place = st.selectbox(
@@ -26,7 +26,7 @@ def page2(df):
                 key="add_college",
             )
             if st.button("Add", key="add_submit"):
-                branches = sorted(df[df["College Name"] == selected_college]["Branch"].dropna().unique())
+                branches = sorted(df[df["College Name"] == selected_college]["Branch Name"].dropna().unique())
                 for branch in branches:
                     selected_list = [selected_category, selected_place, selected_college, branch]
                     cutoff_rank = getcutoff_rank(selected_list, df)
@@ -39,7 +39,7 @@ def page2(df):
                             selected_college,
                             branch,
                             branch_code,
-                            cutoff_rank[1],
+                            cutoff_rank[1], #selected_category
                             cutoff_rank[0],
                         ]
                         st.session_state["selected_colleges"].append(selected_list)

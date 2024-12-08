@@ -1,27 +1,27 @@
 import streamlit as st
 import pandas as pd
+import hashlib
 
-# Define the file path
-FILE_PATH = "cet_colg_data.xlsx"
+# File paths
+FILE_PATH1 = "cet_colg_data.xlsx"
 
-# Load the Excel file
 @st.cache_data
-def load_excel_file():
+def load_excel_file(FILE_PATH):
     """Load Excel file."""
     try:
         data = pd.read_excel(FILE_PATH, engine="openpyxl")
-        data.columns = data.columns.str.strip()  # Remove leading/trailing spaces
+        data.columns = data.columns.str.strip()
         return data
     except Exception as e:
         st.error(f"Error loading file: {e}")
         return None
 
-df = load_excel_file()
+df = load_excel_file(FILE_PATH1)
 
 #Sidebar
 st.sidebar.image('rvce_logo.jpg', width=230)
 st.sidebar.title("Navigator")
-pagelist = ["Home","Normal Sort","College","Branch"]
+pagelist = ["Home","Normal Sort","College","Branch","Best"]
 app = st.sidebar.radio("Select Page", pagelist)
 st.sidebar.markdown("""
     <div style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; color: #f58067;">
@@ -44,3 +44,7 @@ elif app == pagelist[2]:
 elif app == pagelist[3]:
     from page3 import page3
     page3(df)
+
+elif app == pagelist[4]:
+    from page4 import page4
+    page4(df)

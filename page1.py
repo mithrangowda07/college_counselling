@@ -11,7 +11,7 @@ def page1(df):
     
     with col1:  # Add to the list logic
         st.write("### Add to the List")
-        exclusion_list = ["College Code", "Place", "College Name", "Branch", "Branch code"]
+        exclusion_list = ["College Code", "Place", "College Name", "Branch Name", "Branch code"]
         category_list = [col for col in df.columns if col not in exclusion_list]
         selected_category = st.selectbox("Select Category", ["--Select--"] + sorted(category_list), key="add_category")
         selected_place = st.selectbox(
@@ -29,7 +29,7 @@ def page1(df):
             if selected_college and selected_college != "--Select--":
                 selected_branch = st.selectbox(
                     "Select Branch",
-                    ["--Select--"] + sorted(df[df["College Name"] == selected_college]["Branch"].dropna().unique()),
+                    ["--Select--"] + sorted(df[df["College Name"] == selected_college]["Branch Name"].dropna().unique()),
                     key="add_branch",
                 )
                 if selected_branch and selected_branch != "--Select--":
@@ -49,7 +49,7 @@ def page1(df):
                                 selected_college,
                                 selected_branch,
                                 branch_code,
-                                cutoff_rank[1],
+                                cutoff_rank[1], #selected_category
                                 cutoff_rank[0],
                             ]
                             st.session_state["selected_data"].append(selected_list)

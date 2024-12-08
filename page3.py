@@ -10,19 +10,19 @@ def page3(df):
     
     with col1:
         st.write("### Add Branch to the List")
-        exclusion_list = ["College Code", "Place", "College Name", "Branch", "Branch code"]
+        exclusion_list = ["College Code", "Place", "College Name", "Branch Name", "Branch code"]
         category_list = [col for col in df.columns if col not in exclusion_list]
         selected_category = st.selectbox("Select Category", ["--Select--"] + sorted(category_list), key="add_category")
         selected_branch = st.selectbox(
             "Select Branch",
-            ["--Select--"] + sorted(df["Branch"].dropna().unique()),
+            ["--Select--"] + sorted(df["Branch Name"].dropna().unique()),
             disabled=(selected_category == "--Select--"),
             key="add_branch",
         )
         if selected_branch and selected_branch != "--Select--":
             selected_place = st.selectbox(
                 "Select place",
-                ["--Select--"] + sorted(df[df["Branch"] == selected_branch]["Place"].dropna().unique()),
+                ["--Select--"] + sorted(df[df["Branch Name"] == selected_branch]["Place"].dropna().unique()),
                 key="add_place",
             )
             if selected_place and selected_place != "--Select--":
@@ -48,7 +48,7 @@ def page3(df):
                                 selected_college,
                                 selected_branch,
                                 branch_code,
-                                cutoff_rank[1],
+                                cutoff_rank[1], #selected_category
                                 cutoff_rank[0],
                             ]
                             st.session_state["selected_branch"].append(selected_list)
