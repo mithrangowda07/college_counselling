@@ -26,7 +26,7 @@ def page3(df):
                 key="add_place",
             )
             if selected_place and selected_place != "--Select--":
-                filtered_df = df[(df["Place"] == selected_place) & (df["Branch"] == selected_branch)]
+                filtered_df = df[(df["Place"] == selected_place) & (df["Branch Name"] == selected_branch)]
                 selected_college = st.selectbox(
                     "Select College",
                     ["--Select--"] + sorted(filtered_df["College Name"].dropna().unique()),
