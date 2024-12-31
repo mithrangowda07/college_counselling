@@ -31,7 +31,7 @@ st.sidebar.markdown("""
 """, unsafe_allow_html=True)
 
 if app == pagelist[0]:
-    st.title("K-CET Counselling Helper")
+    st.title("K-CET Counselling Helper 🎓")
     
 elif app == pagelist[1]:
     from page1 import page1
