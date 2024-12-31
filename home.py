@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import hashlib
+
 
 # File paths
 FILE_PATH1 = "cet_colg_data.xlsx"
