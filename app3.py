@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from functions_page import getbranch_code, getcutoff_rank, getcollege_code, gettable, generate_pdf_table
 
 # File paths
 FILE_PATH1 = "cet_colg_data.xlsx"
