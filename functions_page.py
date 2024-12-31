@@ -37,8 +37,10 @@ def getcutoff_rank(selected_list, df):
                 "SCK": ["SCK", "SCG", "GM"],
                 "SCR": ["SCR", "SCG", "GM"],
                 "SCG": ["SCG", "GM"],
+                "GMR": ["GMR","GM"],
+                "GMK": ["GMK","GM"],
                 # Default fallbacks for undefined categories
-                "GM": ["GM"],
+                "GM": ["GM"]
             }
 
             
