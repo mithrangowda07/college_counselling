@@ -33,6 +33,75 @@ def get_rank_range(rank):
         return rank * 0.5, rank * 1.35  # 50% to 35%
     else:
         return rank * 0.35, rank * 1.1  # 35% to rank
+# Add CSS styling for uniform button sizes
+st.sidebar.markdown(
+    """
+    <style>
+    .sidebar-button {
+        display: block;
+        text-align: center;
+        height: 40px; /* Set uniform height */
+        line-height: 40px; /* Vertically center text */
+        width: 75%; /* Full width */
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 15px; /* Space between buttons */
+        border-radius: 8px; /* Rounded corners */
+        background-color: #f0f2f6; /* Button background color */
+        color: black; /* Text color */
+        text-decoration: none; /* Remove underline from links */
+        border: 1px solid #ccc; /* Button border */
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .sidebar-button:hover {
+        background-color: #e0e3e8; /* Change color on hover */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.sidebar.image("find.gif", use_container_width=True)
+
+# Sidebar menu
+st.sidebar.write("# Menu")
+
+# About Us button
+st.sidebar.markdown(
+    '<a href="https://about-us.streamlit.app/" class="sidebar-button" target="_self">ℹ️ About Us</a>',
+    unsafe_allow_html=True,
+)
+
+# # Home button
+# st.sidebar.markdown(
+#     '<a href="https://home-page-counsel-mate.streamlit.app/" class="sidebar-button" target="_self">🏠 Home</a>',
+#     unsafe_allow_html=True,
+# )
+
+# Advance Sort button
+st.sidebar.markdown(
+    '<a href="https://efficient-college-and-branch-comparison-tool.streamlit.app/" class="sidebar-button" target="_self">🔄 Advance Sort</a>',
+    unsafe_allow_html=True,
+)
+
+# Seat Matrix button
+st.sidebar.markdown(
+    '<a href="https://kcet-seat-matrix.streamlit.app/" class="sidebar-button" target="_self">📊 Seat Matrix</a>',
+    unsafe_allow_html=True,
+)
+
+# Best button
+st.sidebar.markdown(
+    '<a href="https://best-college-branch-for-kcet.streamlit.app/" class="sidebar-button" target="_self">💎 Best</a>',
+    unsafe_allow_html=True,
+)
+
+# Chat Box button
+st.sidebar.markdown(
+    '<a href="https://chat-box-for-kcet-counselling.streamlit.app/" class="sidebar-button" target="_self">🤖 Chat Box</a>',
+    unsafe_allow_html=True,
+)
 
 # Title
 st.title("🎓 CounselMate: Your College Admission Assistant")
@@ -102,54 +171,3 @@ if user_rank and selected_branches:
         st.error("🚫 No colleges found matching your criteria. Try adjusting your inputs.")
 else:
     st.info("ℹ️ Please enter your rank and select branches to view matching colleges.")
-
-
-st.sidebar.write("# Menu")
-# URL to redirect to
-url = "https://best-college-branch-for-kcet.streamlit.app/"  # Replace this with your desired link
-
-
-
-# Custom CSS to position the "About Us" button
-st.markdown("""
-    <style>
-    .top-right-button {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 9999;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-# Create the About Us button
-if st.sidebar.button("ℹ️ About Us"):
-    st.markdown("""
-    ## About Us  
-    Welcome to **CounselMate: Your College Admission Assistant**, your trusted guide for simplifying the post-exam counseling process for exams like JEE and CET.  
-
-    ### What We Offer:  
-    1. **College Recommendations:** Enter your rank to discover colleges matching your cutoff.  
-    2. **Advanced Sorting:** Prioritize colleges by creating and refining your custom list.  
-    3. **Best Branch Finder:** Identify the ideal branch and college for your aspirations.  
-    4. **Seat Matrix Insights:** Stay updated on seat availability across colleges.  
-    5. **Chatbot Support:** Get instant guidance and answers to your queries.  
-
-    At **CounselMate: Your College Admission Assistant**, we make your counseling journey effortless and efficient.  
-    **Let’s shape your future together!**
-    """)
-    
-    # Button with link
-if st.sidebar.button("🔄 Advance Sort"):
-    # Use Streamlit's experimental rerun functionality to redirect
-    st.experimental_set_query_params(redirect_url=url)
-    st.markdown(f"""
-        <meta http-equiv="refresh" content="0; url={url}">
-    """, unsafe_allow_html=True)
-# # Menu items
-# menu_items = [
-#     {"icon": "🏠", "label": "Home"},
-#     {"icon": "🏛️", "label": "Know About Cluster"},
-#     {"icon": "📊", "label": "Seat Matrix"},
-#     {"icon": "🔄", "label": "Advance Sort"},
-# ]
