@@ -79,7 +79,7 @@ fallback_order = {
 }
 
 # App Title
-st.title("🎓 K-CET Counselling Helper")
+st.title("🎓 CounselMate: Your College Admission Assistant")
 st.write("### 🔍 Explore Seat Matrix and Make Informed Choices")
 
 # Collapsible disclaimer section

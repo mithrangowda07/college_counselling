@@ -45,7 +45,7 @@ def load_excel_file(FILE_PATH):
 df = load_excel_file(FILE_PATH1)
 
 # Title and introduction
-st.title("🎓 K-CET Counselling Helper")
+st.title("🎓 CounselMate: Your College Admission Assistant")
 st.write("### Explore Colleges and Branches Based on Cutoff Ranks")
 
 # Collapsible disclaimer section

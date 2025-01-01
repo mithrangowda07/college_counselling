@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Info Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #f8f9fa;
+    }
+    h1 {
+      color: #333;
+      margin-top: 20px;
+    }
+    #chat-container {
+      width: 90%;
+      max-width: 600px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin: 20px;
+    }
+    .message {
+      margin: 10px 0;
+    }
+    .user {
+      text-align: right;
+    }
+    .assistant {
+      text-align: left;
+    }
+    textarea {
+      width: 90%;
+      max-width: 580px;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      resize: none;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .download-link {
+      display: inline-block;
+      margin: 5px 0;
+      font-size: 14px;
+      color: #007bff;
+      text-decoration: none;
+    }
+    .download-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎓 College Info Chatbot</h1>
+  <div id="chat-container"></div>
+  <textarea id="user-input" rows="4" placeholder="Ask about colleges in India..."></textarea>
+  <br>
+  <button onclick="sendMessage()">Send</button>
+
+  <script>
+    const chatContainer = document.getElementById('chat-container');
+
+    function createMessage(content, role) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${role}`;
+      messageDiv.textContent = content;
+      chatContainer.appendChild(messageDiv);
+
+      // Scroll to bottom of chat
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function downloadContent(content, fileType, fileName) {
+      const blob = new Blob([content], { type: fileType });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      link.textContent = `Download as ${fileType === 'text/plain' ? 'Text' : 'PDF'}`;
+      link.className = 'download-link';
+      chatContainer.appendChild(link);
+    }
+
+    async function sendMessage() {
+      const userInput = document.getElementById('user-input').value.trim();
+      if (!userInput) return;
+
+      // Display user message
+      createMessage(userInput, 'user');
+
+      // Mock API Call
+      const response = await fetch("https://api.example.com/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: userInput,
+          model: "llama3-8b-8192",
+        }),
+      });
+
+      const data = await response.json();
+      const assistantResponse = data.response || "Sorry, I couldn't understand your query.";
+
+      // Display assistant response
+      createMessage(assistantResponse, 'assistant');
+
+      // Enable downloads for the assistant's response
+      downloadContent(assistantResponse, 'text/plain', 'response.txt');
+      downloadContent(assistantResponse, 'application/pdf', 'response.pdf');
+    }
+  </script>
+</body>
+</html>
